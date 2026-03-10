@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleGallery</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* --- 基础样式 --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f111a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* --- Header 区域 --- */
+        .header-container {
+            background: linear-gradient(135deg, #1a1c2c 0%, #0f111a 100%);
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 0 0 15px 0;
+            letter-spacing: -1.5px;
+            background: linear-gradient(45deg, #6B46C1 0%, #9F7AEA 30%, #2ec0d6 70%, #584bec 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine-flow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes shine-flow {
+            from { background-position: 0% center; }
+            to { background-position: 100% center; }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ffffff;
+            font-weight: 400;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            line-height: 1.4;
+        }
+
+        .conference {
+            font-size: 1.2rem;
+            color: #63b3ed;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .authors {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .affiliations {
+            font-size: 0.9rem;
+            color: #fcfdff;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #4facfe;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        sup { color: #4facfe; margin-left: 2px; }
+
+        /* --- 通用容器 --- */
+        .section-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .full-width-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .full-width-img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 40px 50px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-padding {
+            padding: 30px 50px;
+        }
+
+        .content-text {
+            font-size: 0.93rem;
+            color: #ffffff;
+            line-height: 1.8;
+            margin: 0;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* --- Swiper 专用样式 --- */
+        .swiper {
+            width: 100%;
+            height: auto;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            display: block;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: #ffffff;
+            transform: scale(0.6);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 50%;
+        }
+
+        /* --- 新版 Demo 区域样式 --- */
+        .demo-instructions {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .demo-layout {
+            display: flex;
+            gap: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .demo-right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selection-group {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .group-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .selection-hint {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            font-weight: normal;
+        }
+
+        .thumb-grid-new {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 12px;
+        }
+
+        /* 核心特效：上浮变大 */
+        .demo-item {
+            aspect-ratio: 1 / 1;
+            background: #2d3748;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .demo-item:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 选中状态特效：往上浮起且变大 */
+        .demo-item.selected {
+            transform: translateY(-8px) scale(1.1);
+            border-color: #9F7AEA; /* 紫色发光边框表示选中 */
+            box-shadow: 0 10px 20px rgba(159, 122, 234, 0.4);
+            z-index: 2; 
+            position: relative;
+        }
+
+        /* 控制按钮区域 */
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-generate {
+            background: linear-gradient(45deg, #6B46C1, #2ec0d6);
+            color: white;
+            box-shadow: 0 5px 15px rgba(107, 70, 193, 0.3);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.5);
+        }
+
+        .btn-clear {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #f56565;
+            color: #fc8181;
+        }
+
+        /* 结果展示区 */
+        .result-card {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1 / 1;
+            background: #1a1c2c;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 1.2rem;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .result-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none; 
+        }
+
+        .result-label {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-layout { flex-direction: column; }
+            .demo-controls { flex-direction: column; }
+            .title { font-size: 2.5rem; }
+            .content-box, .text-padding { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <h1 class="title">StyleGallery</h1>
+        <p class="subtitle">Training-free and Semantic-aware Personalized Style Transfer <br> from Arbitrary Image References</p>
+        <div class="conference">(CVPR 2026)</div>
+        <div class="authors">Boyu He<sup>1*</sup>, Yunfan Ye<sup>2*</sup>, Chang Liu<sup>1</sup>, Weishang Wu<sup>1</sup>, Fang Liu<sup>2,†</sup>, Zhiping Cai<sup>1,†</sup></div>
+        <div class="affiliations">
+            <sup>1</sup>College of Computer Science and Technology, National University of Defense Technology 
+            <br> <sup>2</sup>School of Design, Hunan University
+        </div>
+        <div class="button-group">
+            <a href="#" class="btn">📖 arXiv</a>
+            <a href="https://github.com/iiiiiiiword/StyleGallery/tree/main" class="btn">🚀 Code</a>
+        </div>
+    </header>
+
+    <section class="section-container">
+        <h2 class="section-title">Interactive Demo</h2>
+        <p class="demo-instructions">
+            Select <b>one content image</b> and <b>one or more style images</b> from the gallery below. 
+            Once you have made your selections, click the <b>Generate</b> button to view your personalized stylized result!
+        </p>
+        
+        <div class="demo-layout">
+            
+            <div class="demo-left-panel">
+                <div class="selection-group">
+                    <div class="group-title">
+                        Content Image <span class="selection-hint">(Single Select)</span>
+                    </div>
+                    <div class="thumb-grid-new" id="content-grid">
+                        <div class="demo-item content-item selected" data-id="c1" style="background-image: url('content/c1.png');"></div>
+                        <div class="demo-item content-item" data-id="c2" style="background-image: url('content/c2.png');"></div>
+                        <div class="demo-item content-item" data-id="c3" style="background-image: url('content/c3.png');"></div>
+                    </div>
+                </div>
+
+                <div class="selection-group">
+                    <div class="group-title">
+                        Style Images <span class="selection-hint">(Multi Select)</span>
+                    </div>
+                    <div class="thumb-grid-new" id="style-grid">
+                        <div class="demo-item style-item selected" data-id="s1" style="background-image: url('style/s1.png');"></div>
+                        <div class="demo-item style-item" data-id="s2" style="background-image: url('style/s2.png');"></div>
+                        <div class="demo-item style-item" data-id="s3" style="background-image: url('style/s3.png');"></div>
+                        <div class="demo-item style-item" data-id="s4" style="background-image: url('style/s4.png');"></div>
+                    </div>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="action-btn btn-clear" id="btn-clear">🗑️ Clear All</button>
+                    <button class="action-btn btn-generate" id="btn-generate">✨ Generate</button>
+                </div>
+            </div>
+
+            <div class="demo-right-panel">
+                <div class="result-card" id="result-display">
+                    <img id="result-img" src="" alt="Stylized Output">
+                    <span id="result-placeholder">Waiting for Generation...</span>
+                </div>
+                <div class="result-label">Stylized Result</div>
+            </div>
+
+        </div>
+    </section>
+    <section class="section-container">
+        <div class="full-width-box">
+            <img src="assets\teaser.png" alt="Teaser" class="full-width-img">
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">Abstract</h2>
+        <div class="content-box">
+            <p class="content-text">
+                Despite the advancements in diffusion-based image style transfer, existing methods are commonly limited by 1) semantic gap: the style reference could miss proper content semantics, causing uncontrollable stylization; 2) reliance on extra constraints (e.g., semantic masks) restricting applicability; 3) rigid feature associations lacking adaptive global-local alignment, failing to balance fine-grained stylization and global content preservation. 
+                These limitations, particularly the inability to flexibly leverage style inputs, fundamentally restrict style transfer in terms of personalization, accuracy, and adaptability.
+                To address these, we propose StyleGallery, a training-free and semantic-aware framework that supports arbitrary reference images as input and enables effective personalized customization.
+                It comprises three core stages: semantic region segmentation (adaptive clustering on latent diffusion features to divide regions without extra inputs); clustered region matching (block filtering on extracted features for precise alignment); and style transfer optimization (energy function–guided diffusion sampling with regional style loss to optimize stylization).
+                Experiments on our introduced benchmark demonstrate that StyleGallery outperforms state-of-the-art methods in content structure preservation, regional stylization, interpretability, and personalized customization, particularly when leveraging multiple style references.
+            </p>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">Method</h2>
+        <div class="full-width-box">
+            <img src="assets\pipeline.png" alt="StyleGallery Pipeline" class="full-width-img">
+            <div class="text-padding">
+                <p class="content-text">
+                    Our pipeline comprises three stages: (a) In stage 1, the content image is diffused for \(T\) steps to extract UNet features \(\{F_0,\dots,F_T\}\), which are weighted into \(F_{mix}\), then clustered via PCA and K-means to optimize the mask. (b) In stage 2, \(F_{mix}\) and the semantic mask identify cluster features, which are aggregated via self-attention for statistical similarity. Meanwhile, DINOv2 splits \(x_0\) into blocks; tokens are filtered for semantic similarity, while cluster positions yield positional similarity. (c) Stage 3 optimizes the generation through \(N\) latent sampling steps. UNet attention maps are extracted, sparsified using the semantic mask, and recombined with style features (\(K_s\), \(V_s\)). L1 distances are then computed between the actual and combined feature maps, as well as the \(Q\) and \(Q_c\). These losses guide the final image generation. 
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title">Results</h2>
+        
+        <div class="full-width-box">
+            <img src="assets\quality-compare.png" alt="Qualitative Comparison" class="full-width-img">
+        </div>
+
+        <div class="full-width-box">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="assets\re-1.png" alt="Personalized Result 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="assets\re-2.png" alt="Personalized Result 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="assets\re-3.png" alt="Personalized Result 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="assets\custom.png" alt="Personalized Result 3">
+                    </div>
+                </div>
+                
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 40px; color: #4a5568; font-size: 0.8rem;">
+        &copy; 2026 StyleGallery Project. All Rights Reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // --- 轮播图逻辑 ---
+        var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            grabCursor: true, 
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+        });
+
+        // --- Interactive Demo 交互逻辑 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const contentItems = document.querySelectorAll('.content-item');
+            const styleItems = document.querySelectorAll('.style-item');
+            const resultImg = document.getElementById('result-img');
+            const resultPlaceholder = document.getElementById('result-placeholder');
+            
+            const btnGenerate = document.getElementById('btn-generate');
+            const btnClear = document.getElementById('btn-clear');
+            
+            // 状态保存
+            let selectedContent = 'c1'; 
+            let selectedStyles = new Set(['s1']); 
+
+            // 1. 内容图单选逻辑
+            contentItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    contentItems.forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedContent = this.getAttribute('data-id');
+                });
+            });
+
+            // 2. 风格图多选逻辑
+            styleItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const styleId = this.getAttribute('data-id');
+                    
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                        selectedStyles.delete(styleId);
+                    } else {
+                        this.classList.add('selected');
+                        selectedStyles.add(styleId);
+                    }
+                });
+            });
+
+            // 3. 点击"Generate"生成按钮逻辑
+            btnGenerate.addEventListener('click', () => {
+                if (!selectedContent) {
+                    alert("Please select a Content Image.");
+                    return;
+                }
+                if (selectedStyles.size === 0) {
+                    alert("Please select at least one Style Image.");
+                    return;
+                }
+
+                resultPlaceholder.style.display = 'none';
+                resultImg.style.display = 'block';
+
+                // 将生成的结果图指向 results 文件夹
+                const sortedStyles = Array.from(selectedStyles).sort().join('_'); 
+                // 确保你生成的图片命名格式为：res_c1_s1.png 等等，并放在 results 目录下
+                const imageUrl = `result/res_${selectedContent}_${sortedStyles}.png`; 
+                
+                resultImg.style.opacity = '0.3';
+                setTimeout(() => {
+                    resultImg.src = imageUrl;
+                    resultImg.style.opacity = '1';
+                }, 150);
+                
+                console.log("Generating combination:", imageUrl); 
+            });
+
+            // 4. 点击"Clear All"清除按钮逻辑
+            btnClear.addEventListener('click', () => {
+                contentItems.forEach(el => el.classList.remove('selected'));
+                styleItems.forEach(el => el.classList.remove('selected'));
+                
+                selectedContent = null;
+                selectedStyles.clear();
+                
+                resultImg.style.display = 'none';
+                resultImg.src = '';
+                resultPlaceholder.textContent = 'Waiting for Generation...';
+                resultPlaceholder.style.display = 'block';
+            });
+        });
+    </script>
+
+</body>
+</html>
